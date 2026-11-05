@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddRecipe from '@/components/AddRecipe'
+import DeleteRecipeButton from '@/components/DeleteRecipeButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,10 +18,13 @@ export default async function Dash() {
       <AddRecipe />
       <div className="space-y-3">
         {recipes.map((r: any) => (
-          <div key={r.id} className="bg-white p-4 rounded shadow text-sm">
-            <p className="font-medium">{r.title}</p>
-            {r.ingredients && <p className="text-gray-600 mt-1">Ingredients: {r.ingredients}</p>}
-            {r.steps && <p className="text-gray-500 mt-1">Steps: {r.steps}</p>}
+          <div key={r.id} className="bg-white p-4 rounded shadow flex justify-between items-start text-sm">
+            <div>
+              <p className="font-medium">{r.title}</p>
+              {r.ingredients && <p className="text-gray-600 mt-1">Ingredients: {r.ingredients}</p>}
+              {r.steps && <p className="text-gray-500 mt-1">Steps: {r.steps}</p>}
+            </div>
+            <DeleteRecipeButton id={r.id} />
           </div>
         ))}
         {recipes.length === 0 && <p className="text-gray-500">No recipes yet</p>}
